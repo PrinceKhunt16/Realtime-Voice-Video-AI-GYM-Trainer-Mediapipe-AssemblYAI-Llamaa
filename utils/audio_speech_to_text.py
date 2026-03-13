@@ -4,6 +4,7 @@ import queue
 import threading
 import time
 import pyaudio
+import websockets.sync.client as ws_sync
 from io import BytesIO
 from typing import Callable, Optional
 from urllib.parse import urlencode
@@ -134,11 +135,6 @@ class AudioCommandPipeline:
         return latest
 
     def _ws_loop(self) -> None:
-        try:
-            import websockets.sync.client as ws_sync
-        except ImportError:
-            raise RuntimeError("Run: pip install websockets")
-
         params = {
             "sample_rate":  self.sample_rate,
             "encoding":     "pcm_s16le",
@@ -148,7 +144,6 @@ class AudioCommandPipeline:
             "min_end_of_turn_silence_when_confident": 400,
             "max_turn_silence":                       1280,
         }
-
         url     = f"{WS_URL}?{urlencode(params)}"
         headers = {"Authorization": self.api_key}
         pa     = pyaudio.PyAudio()
