@@ -65,6 +65,7 @@ def main():
         )
 
         st.metric("Reps Completed (Total)", st.session_state.reps)
+        
         if st.session_state.reps_per_set > 0 and st.session_state.target_sets > 0:
             st.metric(
                 "Current Set Reps",
@@ -125,6 +126,7 @@ def main():
 
         if st.button("New session", use_container_width=True):
             ctx = st.session_state.get("exercise-analysis")
+
             if ctx is not None:
                 if hasattr(ctx, "video_processor") and ctx.video_processor:
                     try:
@@ -133,6 +135,7 @@ def main():
                         pass
                 if isinstance(ctx, str):
                     del st.session_state["exercise-analysis"]
+
             for key in METRICS_KEYS:
                 if "angle" in key or "reps" in key or "sets" in key:
                     st.session_state[key] = 0
@@ -140,7 +143,9 @@ def main():
                     st.session_state[key] = False
                 else:
                     st.session_state[key] = "N/A"
+            
             reset_goal_tracking(st.session_state)
+            
             st.session_state.last_saved_sets_completed = 0
             st.session_state.set_cycle_started_at = time.time()
             st.rerun()
@@ -166,6 +171,7 @@ def main():
     sync_goal_progress(st.session_state)
 
     current_exercise = st.session_state.get("exercise_type", "Squats")
+    
     if st.session_state.get("last_exercise_type") != current_exercise:
         if ctx is not None and not isinstance(ctx, str) and hasattr(ctx, "video_processor") and ctx.video_processor:
             try:
@@ -203,6 +209,7 @@ def main():
                     sets=newly_completed,
                     time=per_set_time * newly_completed,
                 )
+
                 st.session_state.last_saved_sets_completed = sets_completed
                 st.session_state.set_cycle_started_at = now_ts
             except Exception as exc:
@@ -234,10 +241,13 @@ def main():
     st.session_state._prev_stream_active = stream_active
 
     received_voice_payload = False
+    
     if stream_active:
         pipeline: AudioCommandPipeline | None = st.session_state.audio_pipeline
+        
         if pipeline is not None:
             payload = pipeline.pop_latest_response()
+            
             if payload:
                 received_voice_payload = True
                 st.session_state.latest_transcript     = payload.get("transcript", "")
@@ -245,12 +255,13 @@ def main():
                 st.session_state.latest_audio_bytes    = payload.get("audio_bytes", b"")
                 
                 signals = payload.get("control_signals", {})
-                
                 exercise_changed = apply_voice_control_updates(st.session_state, signals)
                 
                 if exercise_changed:
                     st.session_state.reps = 0
+
                 sync_goal_progress(st.session_state)
+                
                 if exercise_changed:
                     st.rerun()
 
@@ -258,10 +269,11 @@ def main():
         last_notified_sets = int(st.session_state.get("last_notified_sets_completed", 0))
         workout_complete = bool(st.session_state.get("workout_complete", False))
         workout_complete_notified = bool(st.session_state.get("last_notified_workout_complete", False))
-
         event_text = None
+
         if workout_complete and not workout_complete_notified:
             event_text = "All planned sets are complete. Congratulate the user and suggest cool-down."
+
             st.session_state.last_notified_workout_complete = True
             st.session_state.last_notified_sets_completed = sets_completed
         elif target_sets > 0 and reps_per_set > 0 and sets_completed > last_notified_sets:
@@ -269,6 +281,7 @@ def main():
                 f"Set {sets_completed} complete out of {target_sets}. "
                 "Give short encouragement and rest guidance."
             )
+
             st.session_state.last_notified_sets_completed = sets_completed
 
         if event_text:
@@ -280,6 +293,7 @@ def main():
                 target_sets=target_sets,
                 reps_per_set=reps_per_set,
             )
+
             st.session_state.latest_voice_response = event_payload.get("response_text", "")
             st.session_state.latest_audio_bytes = event_payload.get("audio_bytes", b"")
 

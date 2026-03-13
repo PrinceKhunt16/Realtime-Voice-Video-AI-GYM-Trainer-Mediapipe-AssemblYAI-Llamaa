@@ -18,10 +18,6 @@ SILENCE     = b"\x00" * CHUNK * 2   # PCM16 silence = 2 bytes per sample
 
 
 def _mp3_duration_seconds(mp3_bytes: bytes) -> float:
-    """
-    Estimate MP3 duration without heavy dependencies.
-    Uses mutagen if available, otherwise falls back to a size-based estimate.
-    """
     if not mp3_bytes:
         return 0.0
     try:
@@ -87,8 +83,8 @@ class AudioCommandPipeline:
         print("[AudioCommandPipeline] stop() called")
         self._stop_event.set()
         self._mute_event.set()  
-
         ws = self._ws
+
         if ws is not None:
             try:
                 ws.close()
@@ -103,7 +99,8 @@ class AudioCommandPipeline:
         self._ws             = None
         self._ws_thread      = None
         self._command_thread = None
-        print("[AudioCommandPipeline] stopped cleanly")
+
+        print("[AudioCommandPipeline] stopped")
 
     def mute_for(self, seconds: float) -> None:
         """
@@ -151,9 +148,9 @@ class AudioCommandPipeline:
             "min_end_of_turn_silence_when_confident": 400,
             "max_turn_silence":                       1280,
         }
+
         url     = f"{WS_URL}?{urlencode(params)}"
         headers = {"Authorization": self.api_key}
-
         pa     = pyaudio.PyAudio()
         stream = pa.open(
             format=pyaudio.paInt16,
@@ -219,6 +216,7 @@ class AudioCommandPipeline:
     def _mic_sender(self, ws, stream: pyaudio.Stream) -> None:
         """Send mic PCM to WebSocket — replaces with silence while muted."""
         sent = 0
+
         while not self._stop_event.is_set():
             try:
                 if self._mute_event.is_set():
@@ -240,6 +238,7 @@ class AudioCommandPipeline:
                 if not self._stop_event.is_set():
                     print(f"[AudioCommandPipeline] mic sender error: {exc}")
                 break
+
         print(f"[AudioCommandPipeline] sender done — {sent} total chunks")
 
     def _command_loop(self) -> None:
@@ -261,16 +260,18 @@ class AudioCommandPipeline:
                     raw_response_text = self.handle_user_command(text)
 
                 signals = parse_llm_control_signals(raw_response_text)
-
                 resolved_goal_sets = signals.goal_sets
+
                 if resolved_goal_sets is None:
                     resolved_goal_sets = transcript_signals.get("goal_sets")
 
                 resolved_goal_reps = signals.goal_reps
+
                 if resolved_goal_reps is None:
                     resolved_goal_reps = transcript_signals.get("goal_reps")
 
                 resolved_exercise = signals.target_exercise
+
                 if resolved_exercise is None:
                     resolved_exercise = transcript_signals.get("target_exercise")
 
@@ -279,6 +280,7 @@ class AudioCommandPipeline:
 
                 # Estimate TTS duration and mute BEFORE handing audio to browser
                 tts_duration = _mp3_duration_seconds(audio_bytes)
+                
                 if tts_duration > 0:
                     self.mute_for(tts_duration)
 

@@ -18,6 +18,7 @@ class LlmControlSignals:
 
 def normalize_exercise_name(raw_name: str) -> Optional[str]:
     key = _canonical_key(raw_name)
+
     if key in EXERCISE_ALIASES:
         return EXERCISE_ALIASES[key]
 
@@ -31,11 +32,10 @@ def parse_llm_control_signals(raw_text: str) -> LlmControlSignals:
     text = (raw_text or "").strip()
     goal_match = GOAL_TAG_RE.search(text)
     exercise_match = EXERCISE_TAG_RE.search(text)
-
     goal_sets = int(goal_match.group(1)) if goal_match else None
     goal_reps = int(goal_match.group(2)) if goal_match else None
-
     target_exercise = None
+
     if exercise_match:
         target_exercise = normalize_exercise_name(exercise_match.group(1).strip())
 
@@ -54,23 +54,28 @@ def parse_llm_control_signals(raw_text: str) -> LlmControlSignals:
 
 def _word_to_number(token: str) -> Optional[int]:
     value = (token or "").strip().lower()
+
     if not value:
         return None
     if value.isdigit():
         return int(value)
+    
     return NUMBER_WORDS.get(value)
 
 
 def _extract_named_number(text: str, label: str) -> Optional[int]:
     pattern = re.compile(rf"\b(\d+|{'|'.join(NUMBER_WORDS.keys())})\s+{label}\b", re.IGNORECASE)
     match = pattern.search(text)
+
     if not match:
         return None
+    
     return _word_to_number(match.group(1))
 
 
 def extract_control_signals_from_text(text: str) -> dict:
     spoken = (text or "").strip()
+
     if not spoken:
         return {
             "goal_sets": None,
@@ -79,6 +84,7 @@ def extract_control_signals_from_text(text: str) -> dict:
         }
 
     target_exercise = None
+
     for exercise_name, pattern in EXERCISE_PATTERNS.items():
         if pattern.search(spoken):
             target_exercise = exercise_name
@@ -86,15 +92,12 @@ def extract_control_signals_from_text(text: str) -> dict:
 
     goal_sets = None
     goal_reps = None
-
     compact = spoken.lower().replace("-", " ")
-    
     first_pattern = re.search(
         r"\b(\d+|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|eighteen|nineteen|twenty)\s+sets?\s*(?:of|x|by)?\s*(\d+|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|eighteen|nineteen|twenty)\s+reps?\b",
         compact,
         re.IGNORECASE,
     )
-    
     second_pattern = re.search(
         r"\b(\d+|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|eighteen|nineteen|twenty)\s+reps?\s*(?:for|x|by)?\s*(\d+|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|eighteen|nineteen|twenty)\s+sets?\b",
         compact,
@@ -113,6 +116,7 @@ def extract_control_signals_from_text(text: str) -> dict:
 
     if isinstance(goal_sets, int) and goal_sets <= 0:
         goal_sets = None
+
     if isinstance(goal_reps, int) and goal_reps <= 0:
         goal_reps = None
 
@@ -170,7 +174,6 @@ def sync_goal_progress(session_state) -> None:
 
 def apply_voice_control_updates(session_state, signals: dict) -> bool:
     changed_exercise = False
-
     goal_sets = signals.get("goal_sets")
     goal_reps = signals.get("goal_reps")
     target_exercise = signals.get("target_exercise")
@@ -182,7 +185,6 @@ def apply_voice_control_updates(session_state, signals: dict) -> bool:
 
     if isinstance(target_exercise, str) and target_exercise in EXERCISE_OPTIONS:
         if session_state.get("exercise_type") != target_exercise:
-            # Do not mutate widget-backed key after widget is instantiated.
             session_state._pending_exercise_type = target_exercise
             changed_exercise = True
 

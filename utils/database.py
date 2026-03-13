@@ -21,8 +21,8 @@ def _get_connection() -> sqlite3.Connection:
 
 
 def init_db() -> None:
-    """Create tables if they do not exist."""
     conn = _get_connection()
+
     with conn:
         conn.execute(
             """
@@ -49,7 +49,6 @@ def init_db() -> None:
 
 
 def get_user(username: str) -> Optional[sqlite3.Row]:
-    """Return the user row for *username*, or None if not found."""
     conn = _get_connection()
     return conn.execute(
         "SELECT * FROM users WHERE username = ?", (username,)
@@ -57,16 +56,13 @@ def get_user(username: str) -> Optional[sqlite3.Row]:
 
 
 def create_user(username: str) -> sqlite3.Row:
-    """
-    Insert a new user and return the resulting row.
-    Raises ``sqlite3.IntegrityError`` if *username* already exists.
-    """
     conn = _get_connection()
+    
     with conn:
         conn.execute(
             "INSERT INTO users (username) VALUES (?)", (username,)
         )
-    return get_user(username)  # type: ignore[return-value]
+    return get_user(username) 
 
 
 def get_or_create_user(username: str) -> sqlite3.Row:
@@ -84,13 +80,8 @@ def add_exercise(
     sets: int,
     time: int,
 ) -> None:
-    """Insert or merge an exercise record for *user_id*.
-
-    If the same exercise was already logged today, the reps are added
-    to the existing total and sets are incremented instead of creating
-    a duplicate row.
-    """
     conn = _get_connection()
+
     with conn:
         existing = conn.execute(
             """
@@ -121,7 +112,6 @@ def add_exercise(
 
 
 def get_user_exercises(user_id: int) -> list[sqlite3.Row]:
-    """Return all exercise rows for *user_id*, newest first."""
     conn = _get_connection()
     return conn.execute(
         """
@@ -135,9 +125,9 @@ def get_user_exercises(user_id: int) -> list[sqlite3.Row]:
 
 
 def get_user_exercise_count(user_id: int) -> int:
-    """Return total number of exercise records logged by *user_id*."""
     conn = _get_connection()
     row = conn.execute(
         "SELECT COUNT(*) AS cnt FROM exercises WHERE user_id = ?", (user_id,)
     ).fetchone()
+
     return int(row["cnt"]) if row else 0

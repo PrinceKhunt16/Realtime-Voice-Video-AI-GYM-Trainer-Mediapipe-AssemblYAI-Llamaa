@@ -10,7 +10,6 @@ def load_css(file_path):
 
 
 def inject_local_font(font_path, font_name):
-    """Base64-encode a local font file and inject it as a @font-face data URI."""
     if not os.path.exists(font_path):
         return
     with open(font_path, "rb") as f:
@@ -30,3 +29,4 @@ def inject_local_font(font_path, font_name):
         }}
         </style>
     """, unsafe_allow_html=True)
+    

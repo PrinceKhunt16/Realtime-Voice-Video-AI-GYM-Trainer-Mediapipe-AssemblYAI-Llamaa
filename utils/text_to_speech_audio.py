@@ -17,6 +17,7 @@ def synthesize_speech(text: str, lang: str = "en") -> bytes:
     except Exception:
         return b""
 
+
 # import os
 # from elevenlabs import ElevenLabs
 # from dotenv import load_dotenv

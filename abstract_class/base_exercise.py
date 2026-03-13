@@ -19,9 +19,9 @@ class BaseExercise(ABC):
     @abstractmethod
     def process(self, landmarks: Any) -> dict:
         """Analyse pose landmarks for one frame and return a metrics dict."""
-        ...
+        pass
 
     @abstractmethod
     def reset(self) -> None:
         """Reset rep count and internal state."""
-        ...
+        pass

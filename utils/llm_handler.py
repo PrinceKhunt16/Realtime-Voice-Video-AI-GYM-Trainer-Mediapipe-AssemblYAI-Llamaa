@@ -11,6 +11,7 @@ class GroqCoach:
         self.api_key = api_key or os.getenv("GROQ_API_KEY")
         self.model = model
         self.client = None
+
         if self.api_key:
             try:
                 groq_module = importlib.import_module("groq")
@@ -61,6 +62,7 @@ class GroqCoach:
                 max_tokens=100,
             )
             message = completion.choices[0].message.content if completion.choices else None
+            
             return (message or "Stay focused and keep good form.").strip()
         except Exception:
             return "Focus on form: controlled movement, steady breathing, and full range of motion."

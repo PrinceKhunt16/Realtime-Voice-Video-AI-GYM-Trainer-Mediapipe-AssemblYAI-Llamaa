@@ -2,27 +2,7 @@ import re
 import threading 
 
 
-METRICS_KEYS = [
-    "reps",
-    "target_sets",
-    "reps_per_set",
-    "sets_completed",
-    "current_set_reps",
-    "workout_complete",
-    "knee_angle",
-    "back_angle",
-    "elbow_angle",
-    "front_knee_angle",
-    "torso_angle",
-    "depth_status",
-    "body_alignment",
-    "hip_status",
-    "shoulder_status",
-    "swing_status",
-    "extension_status",
-    "back_arch_status",
-    "balance_status",
-]
+METRICS_KEYS = [ "reps", "target_sets", "reps_per_set", "sets_completed", "current_set_reps", "workout_complete", "knee_angle", "back_angle", "elbow_angle", "front_knee_angle", "torso_angle", "depth_status", "body_alignment", "hip_status", "shoulder_status", "swing_status", "extension_status", "back_arch_status", "balance_status" ]
 
 
 POSE_CONNECTIONS = [
@@ -124,46 +104,7 @@ EXERCISE_PATTERNS = {
 }
 
 
-NUMBER_WORDS = {
-    "one": 1,
-    "two": 2,
-    "three": 3,
-    "four": 4,
-    "five": 5,
-    "six": 6,
-    "seven": 7,
-    "eight": 8,
-    "nine": 9,
-    "ten": 10,
-    "eleven": 11,
-    "twelve": 12,
-    "thirteen": 13,
-    "fourteen": 14,
-    "fifteen": 15,
-    "sixteen": 16,
-    "seventeen": 17,
-    "eighteen": 18,
-    "nineteen": 19,
-    "twenty": 20,
-}
+NUMBER_WORDS = { "one": 1, "two": 2, "three": 3, "four": 4, "five": 5, "six": 6, "seven": 7, "eight": 8, "nine": 9, "ten": 10, "eleven": 11, "twelve": 12, "thirteen": 13, "fourteen": 14, "fifteen": 15, "sixteen": 16, "seventeen": 17, "eighteen": 18, "nineteen": 19, "twenty": 20 }
 
 
-EXERCISE_ALIASES = {
-    "squat": "Squats",
-    "squats": "Squats",
-    "pushup": "Push-ups",
-    "pushups": "Push-ups",
-    "push-up": "Push-ups",
-    "push-ups": "Push-ups",
-    "pushupss": "Push-ups",
-    "bicepcurl": "Bicep Curls (Dumbbell)",
-    "bicepcurls": "Bicep Curls (Dumbbell)",
-    "bicepcurlsdumbbell": "Bicep Curls (Dumbbell)",
-    "dumbbellcurl": "Bicep Curls (Dumbbell)",
-    "dumbbellcurls": "Bicep Curls (Dumbbell)",
-    "curls": "Bicep Curls (Dumbbell)",
-    "shoulderpress": "Shoulder Press",
-    "overheadpress": "Shoulder Press",
-    "lunges": "Lunges",
-    "lunge": "Lunges",
-}
+EXERCISE_ALIASES = { "squat": "Squats", "squats": "Squats", "pushup": "Push-ups", "pushups": "Push-ups", "push-up": "Push-ups", "push-ups": "Push-ups", "pushupss": "Push-ups", "bicepcurl": "Bicep Curls (Dumbbell)", "bicepcurls": "Bicep Curls (Dumbbell)", "bicepcurlsdumbbell": "Bicep Curls (Dumbbell)", "dumbbellcurl": "Bicep Curls (Dumbbell)", "dumbbellcurls": "Bicep Curls (Dumbbell)", "curls": "Bicep Curls (Dumbbell)", "shoulderpress": "Shoulder Press", "overheadpress": "Shoulder Press", "lunges": "Lunges", "lunge": "Lunges" }

@@ -19,6 +19,7 @@ def drain_metrics_queue(ctx):
 
     # Drain all pending metrics (take the latest one)
     latest = None
+    
     while True:
         try:
             latest = processor.result_queue.get_nowait()

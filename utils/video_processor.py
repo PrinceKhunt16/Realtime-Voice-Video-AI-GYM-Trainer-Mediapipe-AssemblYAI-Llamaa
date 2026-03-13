@@ -1,12 +1,3 @@
-"""WebRTC video processor with MediaPipe 0.10+ Tasks PoseLandmarker.
-
-Uses the mediapipe.tasks.vision API to detect pose and count reps.
-Skeleton is drawn manually since legacy solutions are unavailable.
-"""
-
-# Webcam → WebRTC → VideoProcessor.recv() → MediaPipe PoseLandmarker 
-# → Exercise Detector (SquatDetector) → Metrics Queue → Streamlit UI
-
 import queue
 import threading
 import os

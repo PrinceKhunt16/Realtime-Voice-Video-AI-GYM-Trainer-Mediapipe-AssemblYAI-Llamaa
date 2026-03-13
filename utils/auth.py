@@ -3,10 +3,6 @@ from utils.database import get_or_create_user
 
 
 def render_login_wall() -> bool:
-    """
-    Show username input when the user is not logged in.
-    Returns True when the session has an authenticated user_id, False otherwise.
-    """
     if st.session_state.get("user_id") is not None:
         return True
 
@@ -19,10 +15,13 @@ def render_login_wall() -> bool:
 
     if submitted:
         username = username_input.strip()
+        
         if not username:
             st.error("Name cannot be empty.")
             return False
+        
         user = get_or_create_user(username)
+        
         st.session_state["user_id"] = user["id"]
         st.session_state["username"] = user["username"]
         st.rerun()
