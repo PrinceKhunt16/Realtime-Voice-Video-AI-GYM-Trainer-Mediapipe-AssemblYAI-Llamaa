@@ -16,7 +16,6 @@ from utils.reps_sets_exercise_hanlder import apply_voice_control_updates, reset_
 from utils.database import init_db, add_exercise, get_user_exercises
 from utils.auth import render_login_wall
 
-
 load_dotenv()
 
 
@@ -48,7 +47,7 @@ def main():
         st.title("🏋️‍♂️ Apna AI Coach")
 
         if st.session_state.get("username"):
-            st.caption(f"User: {st.session_state.username}")
+            st.caption(f"👤 {st.session_state.username}")
         
         st.caption("Real-time pose detection and form analysis")
 
@@ -308,8 +307,10 @@ def main():
     if isinstance(user_id, int):
         st.divider()
         st.subheader("Workout History")
+
         try:
             history_rows = get_user_exercises(user_id)
+
             if history_rows:
                 table_data = [
                     {
@@ -321,6 +322,7 @@ def main():
                     }
                     for row in history_rows
                 ]
+
                 st.table(table_data)
             else:
                 st.caption("No saved sets yet. Complete a set to add a record.")
