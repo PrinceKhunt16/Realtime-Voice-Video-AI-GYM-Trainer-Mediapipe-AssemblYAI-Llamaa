@@ -91,7 +91,6 @@ def main():
                 "Sets",
                 min_value=1,
                 max_value=20,
-                value=int(st.session_state.get("plan_sets", 3)),
                 step=1,
                 key="plan_sets",
             )
@@ -99,7 +98,6 @@ def main():
                 "Reps per Set",
                 min_value=1,
                 max_value=50,
-                value=int(st.session_state.get("plan_reps", 10)),
                 step=1,
                 key="plan_reps",
             )

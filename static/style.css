@@ -170,8 +170,6 @@ textarea,
 /* ------------------------------------------------ */
 
 .stForm {
-    max-width: 400px !important;
-    margin: auto !important;
     margin-top: 2rem !important;
     padding: 1.5rem 1rem !important;
     border-radius: 25px !important;
