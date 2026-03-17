@@ -18,7 +18,7 @@ README.md
 *.md
 
 # Local DB (mount separately if needed)
-database.db
+exer-db.db
 
 # OS
 .DS_Store

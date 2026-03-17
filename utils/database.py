@@ -10,7 +10,7 @@ import streamlit as st
 from pathlib import Path
 from typing import Optional
 
-_DB_PATH = str(Path(__file__).parent.parent / "database.db")
+_DB_PATH = str(Path(__file__).parent.parent / "exer-db.db")
 
 
 @st.cache_resource

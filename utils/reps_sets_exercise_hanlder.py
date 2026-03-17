@@ -185,7 +185,7 @@ def apply_voice_control_updates(session_state, signals: dict) -> bool:
 
     if isinstance(target_exercise, str) and target_exercise in EXERCISE_OPTIONS:
         if session_state.get("exercise_type") != target_exercise:
-            session_state._pending_exercise_type = target_exercise
+            session_state.pending_exercise_type = target_exercise
             changed_exercise = True
 
     return changed_exercise
