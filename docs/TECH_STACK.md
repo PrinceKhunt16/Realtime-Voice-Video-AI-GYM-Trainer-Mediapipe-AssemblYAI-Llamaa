@@ -7,7 +7,5 @@
 - Image Processing: OpenCV (headless)
 - LLM Coaching: Groq API
 - Voice Output: gTTS
-- Speech/Audio APIs: AssemblyAI, PyAudio
 - Config/Env: python-dotenv
-- Transport: websockets
 - Packaging: pyproject.toml, requirements.txt

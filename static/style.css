@@ -151,8 +151,6 @@ input,
 textarea,
 .stAlert strong,
 [data-testid="stTextInput"] > div,
-/* [data-testid="stSelectbox"] > div > div, */
-/* [data-baseweb="select"] > div, */
 [data-testid="stButton"] button,
 [data-testid="stBaseButton-secondaryFormSubmit"],
 [data-testid="stBaseButton-secondary"] p,
@@ -178,4 +176,8 @@ textarea,
     padding: 1.5rem 1rem !important;
     border-radius: 25px !important;
     font-family: 'Averta', sans-serif !important;
+}
+
+div {
+    font-family: 'AdobeClean', sans-serif !important;
 }
