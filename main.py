@@ -11,17 +11,12 @@ from services.ui.style_loader import load_css, inject_local_font
 from services.state.session_defaults import initialize_session_state
 from services.tracking.metrics_sync import drain_metrics_queue
 from services.config.workout_config import METRICS_KEYS, EXERCISE_OPTIONS
-from services.coaching.feedback_pipeline import (
-    initialize_voice_state,
-    run_feedback_tick,
-    reset_feedback_engine,
-    autoplay_audio,
-)
+from services.coaching.feedback_pipeline import initialize_voice_state, run_feedback_tick, reset_feedback_engine, autoplay_audio
 from services.tracking.workout_progress import reset_goal_tracking, sync_goal_progress
 from services.persistence.exercise_repository import init_db, add_exercise, get_user_exercises
 from services.auth.login_gate import render_login_wall
 
-load_dotenv()
+load_dotenv()   
 
 
 def _end_session():
@@ -74,19 +69,15 @@ def main():
 
     workout_started = st.session_state.get("workout_started", False)
 
-    # -----------------------------------------------------------------------
-    # SIDEBAR — Workout Plan + Live Metrics
-    # -----------------------------------------------------------------------
     with st.sidebar:
         st.title("🏋️‍♂️ Apna AI Coach")
 
         if st.session_state.get("username"):
-            st.caption(f"👤 {st.session_state.username}")
+            st.caption(f"👤 Login as {st.session_state.username}")
 
-        st.caption("Real-time pose detection and form analysis")
         st.divider()
 
-        # --- Workout Plan Section (editable before start, locked during) ---
+        # Workout Plan Section (editable before start, locked during) 
         st.subheader("📋 Workout Plan")
 
         if not workout_started:
@@ -140,7 +131,7 @@ def main():
 
         st.divider()
 
-        # --- Live metrics (only while workout is active) ---
+        # Live metrics (only while workout is active) 
         if workout_started:
             exercise = st.session_state.get("exercise_type", "Squats")
             reps = int(st.session_state.get("reps", 0))
@@ -195,19 +186,16 @@ def main():
                 st.metric("Torso Angle",      f"{st.session_state.torso_angle}°")
                 st.metric("Balance Status",   st.session_state.balance_status)
 
-    # -----------------------------------------------------------------------
-    # MAIN AREA
-    # -----------------------------------------------------------------------
     st.title("Real-time AI GYM Coach")
     st.caption("Real-time pose detection with proactive AI voice coaching")
 
     if not workout_started:
-        # --- Pre-workout placeholder ---
+        # Pre-workout placeholder 
         st.markdown(
             """
             <div style="
-                border: 2px dashed #444;
-                border-radius: 12px;
+                border: 10px dashed #444;
+                border-radius: 0px;
                 padding: 48px 32px;
                 text-align: center;
                 color: #888;
@@ -223,7 +211,7 @@ def main():
             unsafe_allow_html=True,
         )
     else:
-        # --- Active workout: camera + feedback ---
+        # Active workout: camera + feedback
         current_exercise = st.session_state.get("exercise_type", "Squats")
 
         ctx = webrtc_streamer(
@@ -235,7 +223,7 @@ def main():
             },
             media_stream_constraints={
                 "video": True,
-                "audio": False,   # microphone NOT used — voice coaching is proactive
+                "audio": False,  
             },
             async_processing=True,
         )
@@ -248,7 +236,7 @@ def main():
         sets_completed = int(st.session_state.get("sets_completed", 0))
         last_saved_sets = int(st.session_state.get("last_saved_sets_completed", 0))
 
-        # --- Auto-save completed sets to the database ---
+        # Auto-save completed sets to the database 
         if target_sets > 0 and reps_per_set > 0 and sets_completed > last_saved_sets:
             newly_completed = sets_completed - last_saved_sets
             now_ts = time.time()
@@ -271,7 +259,7 @@ def main():
                 except Exception as exc:
                     st.warning(f"Could not save workout progress: {exc}")
 
-        # --- Proactive AI voice feedback tick ---
+        # Proactive AI voice feedback tick
         if ctx and ctx.state.playing:
             # Build current metrics snapshot for the feedback engine
             current_metrics = {
@@ -301,12 +289,12 @@ def main():
                 reps_per_set=reps_per_set,
             )
 
-        # --- Coach feedback display ---
+        # Coach feedback display
         coach_text = st.session_state.get("latest_coach_text", "")
         if coach_text:
             st.success(f"🏋️ Coach: {coach_text}")
 
-        # --- Play queued audio ---
+        # Play queued audio
         if st.session_state.latest_audio_bytes:
             autoplay_audio(st.session_state.latest_audio_bytes)
             st.session_state.latest_audio_bytes = b""
@@ -316,9 +304,7 @@ def main():
             time.sleep(0.5)
             st.rerun()
 
-    # -----------------------------------------------------------------------
     # WORKOUT HISTORY
-    # -----------------------------------------------------------------------
     user_id = st.session_state.get("user_id")
 
     if isinstance(user_id, int):
@@ -341,16 +327,12 @@ def main():
                 ]
                 df = pd.DataFrame(table_data)
                 df.index = df.index + 1
-                st.table(df)
+                st.table(df, border="horizontal")
             else:
                 st.caption("No saved sets yet. Complete a set to add a record.")
         except Exception as exc:
             st.warning(f"Could not load workout history: {exc}")
 
-
-# ---------------------------------------------------------------------------
-# WebRTC iframe style patcher (inject custom font into the RTC iframe)
-# ---------------------------------------------------------------------------
 font_path = os.path.join(os.getcwd(), "static", "AdobeClean.otf")
 
 with open(font_path, "rb") as f:

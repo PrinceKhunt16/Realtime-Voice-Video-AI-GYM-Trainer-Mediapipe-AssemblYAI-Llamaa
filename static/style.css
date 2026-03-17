@@ -95,6 +95,7 @@ textarea {
 [data-testid="stSelectbox"] > div > div,
 [data-testid="stForm"],
 [data-testid="stMetric"],
+[data-testid="stNumberInputContainer"],
 [data-testid="stDataFrameColumnMenu"],
 [data-testid="stDataFrameColumnMenu"] div,
 [data-testid="stHeadingWithActionElements"],

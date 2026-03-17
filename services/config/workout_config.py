@@ -1,7 +1,3 @@
-import re
-import threading
-
-
 METRICS_KEYS = [
     "reps", "target_sets", "reps_per_set", "sets_completed", "current_set_reps",
     "workout_complete", "knee_angle", "back_angle", "elbow_angle", "front_knee_angle",
@@ -12,7 +8,7 @@ METRICS_KEYS = [
 
 POSE_CONNECTIONS = [
     (11, 12), (11, 13), (13, 15), (12, 14), (14, 16),       # Shoulders & Arms
-    (11, 23), (12, 24), (23, 24),                            # Torso / Hips
+    (11, 23), (12, 24), (23, 24),                           # Torso / Hips
     (23, 25), (24, 26), (25, 27), (26, 28), (27, 29), (28, 30), (29, 31), (30, 32), (27, 31), (28, 32)  # Legs
 ]
 
@@ -54,11 +50,3 @@ EXERCISE_OPTIONS = [
     "Shoulder Press",
     "Lunges",
 ]
-
-
-NUMBER_WORDS = {
-    "one": 1, "two": 2, "three": 3, "four": 4, "five": 5,
-    "six": 6, "seven": 7, "eight": 8, "nine": 9, "ten": 10,
-    "eleven": 11, "twelve": 12, "thirteen": 13, "fourteen": 14, "fifteen": 15,
-    "sixteen": 16, "seventeen": 17, "eighteen": 18, "nineteen": 19, "twenty": 20
-}
