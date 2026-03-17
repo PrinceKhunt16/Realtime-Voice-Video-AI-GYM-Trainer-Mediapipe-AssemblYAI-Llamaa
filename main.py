@@ -3,6 +3,7 @@ import base64
 import time
 import streamlit as st
 import streamlit.components.v1 as components
+import pandas as pd
 from dotenv import load_dotenv
 from streamlit_webrtc import webrtc_streamer, WebRtcMode
 from utils.video_processor import ExerciseVideoProcessor
@@ -313,7 +314,7 @@ def main():
 
             if history_rows:
                 table_data = [
-                    {
+                    {   
                         "Exercise": row["exercise_name"],
                         "Reps": row["reps"],
                         "Sets": row["sets"],
@@ -323,7 +324,10 @@ def main():
                     for row in history_rows
                 ]
 
-                st.table(table_data)
+                df = pd.DataFrame(table_data)
+                df.index = df.index + 1
+
+                st.table(df, border="horizontal")
             else:
                 st.caption("No saved sets yet. Complete a set to add a record.")
         except Exception as exc:
