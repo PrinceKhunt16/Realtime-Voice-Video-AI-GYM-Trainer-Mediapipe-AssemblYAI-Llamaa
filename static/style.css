@@ -178,6 +178,6 @@ textarea,
     font-family: 'Averta', sans-serif !important;
 }
 
-div {
+div, code {
     font-family: 'AdobeClean', sans-serif !important;
 }

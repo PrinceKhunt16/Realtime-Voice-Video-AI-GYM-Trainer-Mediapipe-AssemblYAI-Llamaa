@@ -1,3 +1,1 @@
-from models.squats import SquatDetector
-
-__all__ = ["SquatDetector"]
+__all__ = []
