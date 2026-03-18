@@ -1,4 +1,5 @@
 import os
+import base64
 import streamlit as st
 from dotenv import load_dotenv
 
@@ -10,16 +11,20 @@ load_dotenv()
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 
-def _static_url(relative_path: str) -> str:
-    """Build a static asset URL that works locally and behind a base URL path."""
-    base_url_path = (st.get_option("server.baseUrlPath") or "").strip("/")
-    prefix = f"/{base_url_path}" if base_url_path else ""
-    return f"{prefix}/app/static/{relative_path.lstrip('/')}"
+def get_base64(file_path):
+    with open(file_path, "rb") as f:
+        return base64.b64encode(f.read()).decode()
 
 
 def render_landing_page():
-    img_url = _static_url("IMGs/i1.png")
-    video_url = _static_url("videos/video.mp4")
+    img_path = os.path.join(BASE_DIR, "static", "IMGs", "i1.png")
+    video_path = os.path.join(BASE_DIR, "static", "videos", "video.mp4")
+
+    img_base64 = get_base64(img_path)
+    video_base64 = get_base64(video_path)
+
+    img_src = f"data:image/png;base64,{img_base64}"
+    video_src = f"data:video/mp4;base64,{video_base64}"
 
     st.markdown(f"""
         <div class="container">
@@ -87,7 +92,7 @@ def render_landing_page():
             <div class="img-card">
                 <div class="card-inner">
                     <div class="card-img-wrap">
-                    <img src="{img_url}">
+                    <img src="{img_src}">
                     </div>
                     <div class="card-label">
                     <span class="card-tag">SQUAT</span>
@@ -106,7 +111,7 @@ def render_landing_page():
         </div>
 
         <div class="video-container">
-            <video src="{video_url}" controls></video>
+            <video src="{video_src}" controls></video>
         </div>
         </section>
 
