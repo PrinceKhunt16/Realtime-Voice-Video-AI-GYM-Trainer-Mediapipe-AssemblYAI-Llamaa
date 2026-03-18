@@ -10,8 +10,18 @@ load_dotenv()
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 
+def _static_url(relative_path: str) -> str:
+    """Build a static asset URL that works locally and behind a base URL path."""
+    base_url_path = (st.get_option("server.baseUrlPath") or "").strip("/")
+    prefix = f"/{base_url_path}" if base_url_path else ""
+    return f"{prefix}/app/static/{relative_path.lstrip('/')}"
+
+
 def render_landing_page():
-    st.markdown("""
+    img_url = _static_url("IMGs/i1.png")
+    video_url = _static_url("videos/video.mp4")
+
+    st.markdown(f"""
         <div class="container">
         <div class="grid-overlay"></div>
 
@@ -77,7 +87,7 @@ def render_landing_page():
             <div class="img-card">
                 <div class="card-inner">
                     <div class="card-img-wrap">
-                    <img src="/app/static/IMGs/i1.png">
+                    <img src="{img_url}">
                     </div>
                     <div class="card-label">
                     <span class="card-tag">SQUAT</span>
@@ -96,7 +106,7 @@ def render_landing_page():
         </div>
 
         <div class="video-container">
-            <video src="/app/static/videos/video.mp4" controls></video>
+            <video src="{video_url}" controls></video>
         </div>
         </section>
 
