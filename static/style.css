@@ -385,12 +385,12 @@ div[role="menuitem"] {
   font-style: normal;
   color: #ffd08a;
 }
-
+/* 
 .card-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 1rem;
-}
+} */
 
 .img-card {
   border: 1px solid var(--border);
@@ -398,11 +398,11 @@ div[role="menuitem"] {
 }
 
 .card-inner {
-  padding: 0.6rem;
+  margin: 0.6rem;
 }
 
 .card-img-wrap {
-  aspect-ratio: 16 / 10;
+  /* aspect-ratio: 16 / 10; */
   min-height: 220px;
   overflow: hidden;
   border: 1px solid var(--border);

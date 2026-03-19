@@ -17,13 +17,19 @@ def get_base64(file_path):
 
 
 def render_landing_page():
-    img_path = os.path.join(BASE_DIR, "static", "IMGs", "i1.png")
+    img1_path = os.path.join(BASE_DIR, "static", "IMGs", "i1.png")
+    img2_path = os.path.join(BASE_DIR, "static", "IMGs", "i2.png")
+    img3_path = os.path.join(BASE_DIR, "static", "IMGs", "i3.png")
     video_path = os.path.join(BASE_DIR, "static", "videos", "video.mp4")
 
-    img_base64 = get_base64(img_path)
+    img1_base64 = get_base64(img1_path)
+    img2_base64 = get_base64(img2_path)
+    img3_base64 = get_base64(img3_path)
     video_base64 = get_base64(video_path)
 
-    img_src = f"data:image/png;base64,{img_base64}"
+    img1_src = f"data:image/png;base64,{img1_base64}"
+    img2_src = f"data:image/png;base64,{img2_base64}"
+    img3_src = f"data:image/png;base64,{img3_base64}"
     video_src = f"data:video/mp4;base64,{video_base64}"
 
     st.markdown(f"""
@@ -55,7 +61,7 @@ def render_landing_page():
         </h1>
 
         <p class="hero-sub">
-            Your form. Analyzed. Corrected. In milliseconds.
+            Your form. Analyzed. Corrected. In real-time.
         </p>
 
         <div class="hero-cta-row">
@@ -70,12 +76,12 @@ def render_landing_page():
             </div>
             <div class="metric-divider"></div>
             <div class="metric">
-            <span class="metric-val">17+</span>
-            <span class="metric-label">Joints</span>
+            <span class="metric-val">5+</span>
+            <span class="metric-label">Exercises</span>
             </div>
             <div class="metric-divider"></div>
             <div class="metric">
-            <span class="metric-val">90%</span>
+            <span class="metric-val">95%</span>
             <span class="metric-label">Accuracy</span>
             </div>
         </div>
@@ -92,11 +98,31 @@ def render_landing_page():
             <div class="img-card">
                 <div class="card-inner">
                     <div class="card-img-wrap">
-                    <img src="{img_src}">
+                    <img src="{img1_src}">
                     </div>
                     <div class="card-label">
-                    <span class="card-tag">SQUAT</span>
-                    <p>Form analysis</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+         <div class="card-grid">
+            <div class="img-card">
+                <div class="card-inner">
+                    <div class="card-img-wrap">
+                    <img src="{img2_src}">
+                    </div>
+                    <div class="card-label">
+                    </div>
+                </div>
+            </div>
+        </div>
+         <div class="card-grid">
+            <div class="img-card">
+                <div class="card-inner">
+                    <div class="card-img-wrap">
+                    <img src="{img3_src}">
+                    </div>
+                    <div class="card-label">
                     </div>
                 </div>
             </div>
